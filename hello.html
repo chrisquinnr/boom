@@ -1,0 +1,22 @@
+<head>
+  <title>Boom</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+
+<body>
+  {{> boom}}
+</body>
+
+<template name="boom">
+  {{#if gif}}
+    {{#each gif}}
+    <img class="fullwidth" src="{{gifpath}}">
+    {{/each}}
+    <button class="btn btn-sm btn-danger" id="reset">reset</button>
+  {{else}}
+    <button class="btn btn-lg btn-danger" id="boom">BOOM</button>
+  {{/if}}
+
+</template>
