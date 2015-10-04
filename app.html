@@ -12,11 +12,16 @@
 <template name="boom">
   {{#if gif}}
     {{#each gif}}
-    <img class="fullwidth" src="{{gifpath}}">
+      <img class="fullwidth" src="{{gifpath}}">
     {{/each}}
-    <button class="btn btn-sm btn-danger" id="reset">reset</button>
+    {{#if first}}
+      <button class="btn btn-sm btn-danger" id="reset">reset</button>
+    {{/if}}
   {{else}}
-    <button class="btn btn-lg btn-danger" id="boom">BOOM</button>
+    {{#if first}}
+      <button class="btn btn-lg btn-danger" id="boom">BOOM</button>
+    {{else}}
+      Thanks for joining.
+    {{/if}}
   {{/if}}
-
 </template>

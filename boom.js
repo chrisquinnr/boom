@@ -1,9 +1,14 @@
 if (Meteor.isClient) {
-  // counter starts at 0
-  Session.setDefault('counter', 0);
   Template.boom.helpers({
     gif: function () {
       return Boom.find().fetch();
+    },
+    first: function(){
+      var id = Session.get('id');
+      if(!id){
+        Session.set('id', Random.id());
+      }
+      return ReactiveMethod.call('getFirst', Session.get('id'));
     }
   });
 
@@ -12,18 +17,18 @@ if (Meteor.isClient) {
       Meteor.call('setGif', true);
     },
     'click #reset': function () {
-      Session.set('trigger', true);
       Meteor.call('setGif', false);
     }
   });
 }
 
 Boom = new Meteor.Collection('boom');
+First = new Meteor.Collection('track');
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
-    // code to run on server at startup
     Boom.remove({});
+    First.remove({});
   });
   Meteor.methods({
     setGif:function(gif){
@@ -31,6 +36,15 @@ if (Meteor.isServer) {
       if(gif){
         return Boom.insert({gifpath: '/giphy.gif'})
       }
+    },
+    getFirst:function(marker){
+
+      var check = First.find({}).count();
+      if(check < 1){
+        return First.insert({_id:marker});
+      } else {
+        return false;
+      }
     }
-  })
+  });
 }
