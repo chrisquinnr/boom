@@ -31,6 +31,7 @@ if (Meteor.isServer) {
     First.remove({});
   });
   Meteor.methods({
+		//test
     setGif:function(gif){
       Boom.remove({});
       if(gif){
