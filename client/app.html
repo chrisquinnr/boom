@@ -1,0 +1,84 @@
+<head>
+  <title>Hyperspace by HTML5 UP</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+  <link rel="stylesheet" href="assets/css/main.css" />
+  <!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
+  <!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+</head>
+<template name="home">
+  {{#if create}}
+    {{>creater}}
+  {{else}}
+    {{#if gif}}
+      {{>boom gif=gif}}
+    {{else}}
+      {{>boring}}
+    {{/if}}
+  {{/if}}
+</template>
+<template name="boring">
+
+  <!-- Wrapper -->
+  <div id="wrapper">
+
+    <!-- Intro -->
+    <section id="intro" class="wrapper style1 fullscreen fade-up">
+      <div class="inner">
+        <h1>Boom.</h1>
+        <p>
+          Thanks for joining. <small>wait for the boom</small>
+        </p>
+        <p class="footer">
+          <a href="/creater">Create your own Boom</a>
+        </p>
+      </div>
+    </section>
+  </div>
+
+</template>
+<template name="boom">
+  {{#with gif}}
+    {{#if movie}}
+      <video autoplay controls="controls" width="100%" name="Video Name" src="{{gifpath}}"></video>
+    {{else}}
+      <img class="fullwidth" src="{{gifpath}}">
+    {{/if}}
+  {{/with}}
+</template>
+
+<template name="creater">
+
+  <!-- Wrapper -->
+  <div id="wrapper">
+
+    <!-- Intro -->
+    <section id="intro" class="wrapper style1 fullscreen fade-up">
+      <div class="inner">
+        <h1>Create the Boom.</h1>
+        <p>{{#each uploads}}
+          <button class="btn btn-info loadGif" id="{{_id}}">{{name}}</button>
+        {{/each}}
+        </p>
+        <p>
+          {{> upload_bootstrap }}
+        </p>
+      </div>
+    </section>
+  </div>
+</template>
+
+<template name="stager">
+  <!-- Wrapper -->
+  <div id="wrapper">
+
+    <!-- Intro -->
+    <section id="intro" class="wrapper style1 fullscreen fade-up">
+      <div class="inner">
+        <h1>Ready?</h1>
+        <button class="btn btn-danger boom">BOOM</button>
+      </div>
+    </section>
+  </div>
+</template>
