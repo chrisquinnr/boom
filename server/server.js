@@ -24,6 +24,10 @@ Meteor.startup(function () {
 
 Meteor.methods({
   setGif:function(id){
+
     Boom.update({_id:id}, {$set:{active:true}});
+  },
+  closeGif:function(id){
+    Boom.update({_id:id}, {$set:{active:false}});
   }
 });

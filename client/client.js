@@ -45,7 +45,13 @@ Template.stager.helpers({
 Template.stager.events({
    'click .boom':(e)=>{
      //Session.set('loadGif', e.currentTarget.id);
-
      Meteor.call('setGif', Session.get('loadGif'));
+
+   },
+   'click .close':(e)=>{
+     //Session.set('loadGif', e.currentTarget.id);
+
+     Meteor.call('closeGif', Session.get('loadGif'));
+
    }
 });
