@@ -1,1 +1,1 @@
-export var Boom = new Mongo.Collection('boom');
+export let Boom = new Mongo.Collection('boom');

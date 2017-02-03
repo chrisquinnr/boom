@@ -1,42 +1,73 @@
 <head>
-  <title>Hyperspace by HTML5 UP</title>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!--[if lte IE 8]><script src="assets/js/ie/html5shiv.js"></script><![endif]-->
-  <link rel="stylesheet" href="assets/css/main.css" />
-  <!--[if lte IE 9]><link rel="stylesheet" href="assets/css/ie9.css" /><![endif]-->
-  <!--[if lte IE 8]><link rel="stylesheet" href="assets/css/ie8.css" /><![endif]-->
+  <title>Boom | Gravitywell Labs</title>
+  <meta charset="utf-8"/>
+  <!--[if lte IE 8]>
+  <script src="assets/js/ie/html5shiv.js"></script><![endif]-->
+  <link rel="stylesheet" href="assets/css/main.css"/>
+  <!--[if lte IE 9]>
+  <link rel="stylesheet" href="assets/css/ie9.css"/><![endif]-->
+  <!--[if lte IE 8]>
+  <link rel="stylesheet" href="assets/css/ie8.css"/><![endif]-->
 </head>
 <template name="home">
-  {{#if create}}
-    {{>creater}}
+  {{#if url}}
+    {{>boring}}
   {{else}}
-    {{#if gif}}
-      {{>boom gif=gif}}
+    {{#if create}}
+      {{>creater}}
     {{else}}
-      {{>boring}}
+      {{>welcome}}
     {{/if}}
   {{/if}}
-</template>
-<template name="boring">
 
+</template>
+
+<template name="welcome">
   <!-- Wrapper -->
   <div id="wrapper">
 
     <!-- Intro -->
     <section id="intro" class="wrapper style1 fullscreen fade-up">
-      <div class="inner">
-        <h1>Boom.</h1>
-        <p>
-          Thanks for joining. <small>wait for the boom</small>
+      <div class="">
+        <h1 class="align-center">Welcome to the Boom.</h1>
+        <p class="align-center">Play syncronised gifs. Be like epic gandalf guy.</p>
+
+        <p class="align-center">
+          <button class="gocreate">Create</button>
         </p>
-<!--        <p class="footer">
-          <a href="/creater">Create your own Boom</a>
-        </p>-->
+
       </div>
     </section>
   </div>
+</template>
 
+<template name="boring">
+  {{#if gif}}
+    {{#with gif}}
+      {{#if movie}}
+        <video autoplay controls="controls" width="100%" name="Video Name" src="{{gifpath}}"></video>
+      {{else}}
+        <img class="fullwidth" src="{{gifpath}}">
+      {{/if}}
+    {{/with}}
+  {{else}}
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+      <!-- Intro -->
+      <section id="intro" class="wrapper style1 fullscreen fade-up">
+        <div class="">
+          <h1 class="align-center">Boom.</h1>
+          <p class="align-center">
+            <img class="loader" src="/big-loading-gif.gif">
+          </p>
+          <p class="align-center">
+            Thanks for joining.<br>Wait for the boom.<br>
+          </p>
+        </div>
+      </section>
+    </div>
+  {{/if}}
 </template>
 <template name="boom">
   {{#with gif}}
@@ -49,10 +80,8 @@
 </template>
 
 <template name="creater">
-
   <!-- Wrapper -->
-  <div id="wrapper">
-
+  <div id="wrapper" class="align-center">
     <!-- Intro -->
     <section id="intro" class="wrapper style1 fullscreen fade-up">
       <div class="inner">
@@ -61,7 +90,8 @@
           <button class="btn btn-info loadGif" id="{{_id}}">{{name}}</button>
         {{/each}}
         </p>
-        <p>
+        <p class="align-center">
+          {{> dropzone }}
           {{> upload_bootstrap }}
         </p>
       </div>
@@ -76,9 +106,17 @@
     <!-- Intro -->
     <section id="intro" class="wrapper style1 fullscreen fade-up">
       <div class="inner">
-        <h1>Ready?</h1>
-        <button class="btn btn-danger boom">BOOM</button>
-        <button id="reset" class="btn btn-default close">close</button>
+        <h1 class="align-center">Ready?</h1>
+        <p>
+          Tell ppl to go here: <a href="{{getURL}}">{{getURL}}</a>
+        </p>
+        <p class="align-center">
+          <button class="btn btn-danger boom">BOOM</button>
+        </p>
+        <p class="align-center">
+          <button id="reset" class="btn btn-default close">close</button>
+        </p>
+
       </div>
     </section>
   </div>

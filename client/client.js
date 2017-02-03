@@ -1,57 +1,77 @@
-import {Boom} from '../common/collections'
+import { Boom } from '../common/collections';
+import { Template } from 'meteor/templating';
+import { FlowRouter } from 'meteor/kadira:flow-router';
 
 Template.home.helpers({
-    gif: function () {
-      let b = Boom.findOne({active:true});
-      console.log(b);
-      return b;
-    },
-    first: function(){
-      var id = Session.get('id');
-      if(!id){
-        Session.set('id', Random.id());
-      }
-      return ReactiveMethod.call('getFirst', Session.get('id'));
-    },
-  create:()=>{
-    if(FlowRouter.getRouteName() === 'creater'){
+
+  create: () => {
+    if (FlowRouter.getRouteName() === 'creator') {
       return true;
     }
   }
-  });
+});
+
+Template.welcome.events({
+  'click .gocreate':()=>{
+    FlowRouter.go('/creator');
+  }
+});
+
+Template.home.events({
+  'click .create': ( event ) => {
+    FlowRouter.go('/creator')
+  }
+});
+
+Template.boring.helpers({
+  gif: function() {
+    return Boom.findOne({ _id:FlowRouter.getQueryParam("id"), active: true });
+  },
+})
+
+Template.boring.onRendered(()=>{
+  console.log(FlowRouter.getQueryParam("id"));
+});
 
 Template.creater.events({
-   'click #boom': function () {
-     Meteor.call('setGif', true);
-   },
-   'click #reset': function () {
-     Meteor.call('setGif', false);
-   },
-  'click .loadGif':(e)=>{
-    Session.set('loadGif', e.currentTarget.id);
+  'click #boom': ( event ) => {
+    Meteor.call('setGif', true);
+  },
+  'click #reset': ( event ) => {
+    Meteor.call('setGif', false);
+  },
+  'click .loadGif': ( event ) => {
+    Session.set('loadGif', event.currentTarget.id);
+    let url = "http://chris.gw:5050/?id=" + event.currentTarget.id;
+    Session.set('url', url);
     FlowRouter.go('/stager')
   }
- });
+});
 
 Template.creater.helpers({
-  uploads:()=>{
-   return Boom.find({}).fetch();
+  uploads: () => {
+    return Boom.find({}).fetch();
   }
 });
 
 Template.stager.helpers({
+  getURL:()=>{
+    return Session.get('url');
+  }
 });
 
 Template.stager.events({
-   'click .boom':(e)=>{
-     //Session.set('loadGif', e.currentTarget.id);
-     Meteor.call('setGif', Session.get('loadGif'));
-
-   },
-   'click .close':(e)=>{
-     //Session.set('loadGif', e.currentTarget.id);
-
-     Meteor.call('closeGif', Session.get('loadGif'));
-
-   }
+  'click .boom': ( event ) => {
+    Meteor.call('setGif', Session.get('loadGif'));
+  },
+  'click .close': ( event ) => {
+    if (Session.get('loadGif')) {
+      Meteor.call('closeGif', Session.get('loadGif'));
+    } else {
+      FlowRouter.go('/creator')
+    }
+  },
+  'click .back': ( event ) => {
+    FlowRouter.go('/creator')
+  }
 });
