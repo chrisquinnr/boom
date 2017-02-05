@@ -1,39 +1,55 @@
-import { Boom } from '../common/collections';
+import { Meteor } from 'meteor/meteor';
+import {
+  Boom,
+  Stats
+} from '/common/collections';
 import { Template } from 'meteor/templating';
 import { FlowRouter } from 'meteor/kadira:flow-router';
+import { ReactiveVar } from 'meteor/reactive-var';
+import { ReactiveDict } from 'meteor/reactive-dict';
 
-Template.home.helpers({
-
-  create: () => {
-    if (FlowRouter.getRouteName() === 'creator') {
-      return true;
-    }
-  }
-});
+let gif = new ReactiveVar();
+let url = new ReactiveVar();
 
 Template.welcome.events({
-  'click .gocreate':()=>{
-    FlowRouter.go('/creator');
-  }
-});
-
-Template.home.events({
   'click .create': ( event ) => {
     FlowRouter.go('/creator')
   }
 });
 
-Template.boring.helpers({
-  gif: function() {
-    return Boom.findOne({ _id:FlowRouter.getQueryParam("id"), active: true });
-  },
-})
-
-Template.boring.onRendered(()=>{
-  console.log(FlowRouter.getQueryParam("id"));
+Template.welcome.events({
+  'click .gocreate': () => {
+    FlowRouter.go('/creator');
+  }
 });
 
-Template.creater.events({
+Template.joined.onCreated(function() {
+  let self = this;
+  self.autorun( function() {
+    self.subscribe('boom');
+  });
+});
+
+Template.joined.helpers({
+  gif: function() {
+    return Boom.findOne({ _id:FlowRouter.getQueryParam("id"), active: true });
+  }
+});
+
+Template.joined.onRendered( () => {
+  let id = localStorage.getItem('myBoomID');
+  if(!id){
+    Meteor.call('newSub', FlowRouter.getQueryParam("id"), (err, resp)=>{
+      if(!err){
+        if(resp) localStorage.setItem('myBoomID', resp);
+      }
+    });
+  } else {
+    Meteor.call('oldSub', FlowRouter.getQueryParam("id"), id);
+  }
+});
+
+Template.creator.events({
   'click #boom': ( event ) => {
     Meteor.call('setGif', true);
   },
@@ -41,32 +57,46 @@ Template.creater.events({
     Meteor.call('setGif', false);
   },
   'click .loadGif': ( event ) => {
-    Session.set('loadGif', event.currentTarget.id);
-    let url = "http://chris.gw:5050/?id=" + event.currentTarget.id;
-    Session.set('url', url);
+    gif.set(event.currentTarget.id);
+    let path = "http://chris.gw:5050/?id=" + gif.get();
+    url.set(path);
     FlowRouter.go('/stager')
   }
 });
 
-Template.creater.helpers({
+Template.creator.helpers({
   uploads: () => {
     return Boom.find({}).fetch();
+  },
+  gifUp: () => {
+    return gif.get();
+  },
+  getStatus: () => {
+    let st = Stats.find({}).fetch();
+    return st.length;
   }
 });
 
+Template.creator.onCreated(function() {
+  let self = this;
+  self.autorun( function() {
+    self.subscribe('boom');
+  });
+});
+
 Template.stager.helpers({
-  getURL:()=>{
-    return Session.get('url');
+  getURL: () => {
+    return url.get();
   }
 });
 
 Template.stager.events({
   'click .boom': ( event ) => {
-    Meteor.call('setGif', Session.get('loadGif'));
+    Meteor.call('setGif', gif.get());
   },
   'click .close': ( event ) => {
-    if (Session.get('loadGif')) {
-      Meteor.call('closeGif', Session.get('loadGif'));
+    if (gif.get()) {
+      Meteor.call('closeGif', gif.get());
     } else {
       FlowRouter.go('/creator')
     }
@@ -74,4 +104,12 @@ Template.stager.events({
   'click .back': ( event ) => {
     FlowRouter.go('/creator')
   }
+});
+
+Template.stager.onCreated( function() {
+  let self = this;
+  self.autorun( function() {
+    self.subscribe('boom');
+    self.subscribe('stats');
+  });
 });

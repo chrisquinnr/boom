@@ -1,7 +1,8 @@
-import { Boom } from '/common/collections';
+import { Meteor } from 'meteor/meteor';
+import { Boom, Stats, Subs } from '/common/collections';
 
 Meteor.startup(function() {
-  
+
   UploadServer.init({
     tmpDir: process.env.PWD + '/.uploads/tmp',
     uploadDir: process.env.PWD + '/.uploads/',
@@ -13,10 +14,20 @@ Meteor.startup(function() {
 });
 
 Meteor.methods({
-  setGif: function( id ) {
+  setGif: ( id ) =>  {
     return Boom.update({ _id: id }, { $set: { active: true } });
   },
-  closeGif: function( id ) {
+  closeGif: ( id ) => {
     Boom.update({ _id: id }, { $set: { active: false } });
+  },
+  newSub: (gifID) => {
+    let d = new Date();
+    let id = Subs.insert({date_joined: d});
+    Stats.insert({subID:id, gifID: gifID, date_landed: d});
+    return id;
+  },
+  oldSub: (gifID, id) => {
+    let d = new Date();
+    Stats.insert({subID:id, gifID: gifID, date_landed: d});
   }
 });
