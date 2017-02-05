@@ -1,0 +1,28 @@
+<template name="joined">
+  {{#if gif}}
+    {{#with gif}}
+      {{#if movie}}
+        <video autoplay controls="controls" width="100%" name="Video Name" src="{{gifpath}}"></video>
+      {{else}}
+        <img class="fullwidth" src="{{gifpath}}">
+      {{/if}}
+    {{/with}}
+  {{else}}
+    <!-- Wrapper -->
+    <div id="wrapper">
+
+      <!-- Intro -->
+      <section id="intro" class="wrapper style1 fullscreen fade-up">
+        <div class="">
+          <h1 class="align-center">Boom.</h1>
+          <p class="align-center">
+            <img class="loader" src="/big-loading-gif.gif">
+          </p>
+          <p class="align-center">
+            Thanks for joining.<br>Wait for the boom.<br>
+          </p>
+        </div>
+      </section>
+    </div>
+  {{/if}}
+</template>

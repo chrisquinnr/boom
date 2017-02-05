@@ -1,0 +1,9 @@
+<template name="boom">
+  {{#with gif}}
+    {{#if movie}}
+      <video autoplay controls="controls" width="100%" name="Video Name" src="{{gifpath}}"></video>
+    {{else}}
+      <img class="fullwidth" src="{{gifpath}}">
+    {{/if}}
+  {{/with}}
+</template>

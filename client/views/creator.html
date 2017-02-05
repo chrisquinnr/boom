@@ -1,0 +1,17 @@
+<template name="creator">
+  <div id="wrapper" class="align-center">
+    <section id="intro" class="wrapper style1 fullscreen fade-up">
+      <div class="inner">
+        <h1>Create the Boom.</h1>
+        <p>{{#each uploads}}
+          <button class="btn btn-info loadGif" id="{{_id}}">{{name}}</button>
+        {{/each}}
+        </p>
+        <p class="align-center">
+          {{> dropzone }}
+          {{> upload_bootstrap }}
+        </p>
+      </div>
+    </section>
+  </div>
+</template>
